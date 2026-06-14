@@ -13,10 +13,39 @@ export function ContactSection() {
     handleSubmit,
   } = useContactForm()
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    handleSubmit()
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault()
+
+  handleSubmit()
+
+  const formData = new FormData()
+
+  formData.append(
+    "access_key",
+    "b4014ca1-94a9-44bc-8f09-12fba006094c"
+  )
+
+  formData.append("name", values.name)
+  formData.append("email", values.email)
+  formData.append("message", values.message)
+
+  const response = await fetch(
+    "https://api.web3forms.com/submit",
+    {
+      method: "POST",
+      body: formData,
+    }
+  )
+
+  const data = await response.json()
+
+  if (data.success) {
+    alert("Message sent successfully!")
+  } else {
+    alert("Failed to send message")
+    console.log(data)
   }
+}
 
   return (
     <section
